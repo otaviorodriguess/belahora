@@ -33,13 +33,22 @@ Na versão em nuvem, a agenda acompanha a conta. Ao entrar com o mesmo login em 
 | Aplicativo instalável | PWA para abrir pela tela inicial do celular |
 | Migração e backup | Importação da agenda antiga, cópia preservada e conferência de conflitos |
 
-## Como funciona
+## Conheça o aplicativo
 
-### Acesso de demonstração
+Entre no [BelaHora](https://agenda-estetica-phi.vercel.app) com o acesso de demonstração:
+
+| Campo | Acesso |
+| --- | --- |
+| **E-mail** | `teste@belahora.example` |
+| **Senha** | `BelaHora!Visita2026` |
+
+Explore a agenda, os detalhes dos atendimentos, a busca e as configurações. São **21 agendamentos fictícios e 4 serviços** para conhecer a experiência. Se aparecer um aviso de nova versão no PWA, toque em **Atualizar** antes de entrar.
 
 Uma conta de demonstração por e-mail e senha permite conhecer as telas com serviços e atendimentos fictícios. A conta é identificada como **somente leitura**: criação, edição, cancelamento, importação e ativação do link ficam bloqueados. A API verifica essa restrição no servidor, independentemente dos botões da interface.
 
-O modo de demonstração não reivindica nem importa a agenda local do visitante. As credenciais de visita são fornecidas pelo administrador e não ficam no código-fonte. O atributo `accounts/{uid}.readOnly` só deve ser administrado em ambiente confiável; as regras do Firestore bloqueiam gravações diretas pelo cliente.
+O modo de demonstração não reivindica nem importa a agenda local do visitante. Este acesso é compartilhado exclusivamente para demonstração e não dá acesso às agendas reais. O atributo `accounts/{uid}.readOnly` só deve ser administrado em ambiente confiável; as regras do Firestore bloqueiam gravações diretas pelo cliente.
+
+## Como funciona
 
 ```mermaid
 flowchart LR

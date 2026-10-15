@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="420" viewBox="0 0 1280 420">
+  <rect width="1280" height="420" rx="28" fill="#faf8f5"/>
+  <circle cx="1190" cy="30" r="280" fill="#f0e3df"/>
+  <circle cx="1220" cy="80" r="190" fill="none" stroke="#c69b91" stroke-width="1"/>
+  <circle cx="1220" cy="80" r="220" fill="none" stroke="#c69b91" stroke-width="1"/>
+  <rect x="64" y="62" width="180" height="32" rx="16" fill="#85514f"/>
+  <text x="154" y="83" text-anchor="middle" font-family="Arial,sans-serif" font-size="12" letter-spacing="3" fill="#fff">TEMPO DE CUIDAR</text>
+  <text x="60" y="215" font-family="Georgia,serif" font-size="100" fill="#513432">BelaHora</text>
+  <text x="66" y="271" font-family="Arial,sans-serif" font-size="25" fill="#85514f">Sua agenda de estética. Onde você estiver.</text>
+  <path d="M66 310h700" stroke="#dfc8c1"/>
+  <text x="66" y="351" font-family="Arial,sans-serif" font-size="16" letter-spacing="2" fill="#7c6d65">AGENDAMENTOS · SINCRONIZAÇÃO · CUIDADO</text>
+</svg>

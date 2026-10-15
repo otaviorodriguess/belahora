@@ -1,0 +1,24 @@
+node_modules/
+dist/
+.env
+.env.local
+.env.*.local
+coverage/
+work/
+*.log
+firebase-debug.log*
+ui-debug.log*
+test-results/
+playwright-report/
+*.tsbuildinfo
+.vercel/
+
+.vercel
+
+# Segredos e credenciais locais
+.env.*
+!.env.example
+*.pem
+*.key
+*service-account*.json
+*serviceAccount*.json

@@ -16,6 +16,8 @@ async function accountFor(code: string, requireActive = true) {
     throw new BookingError('LINK_PAUSED', 'Link indisponível. Fale com a profissional.', 404);
   const uid = link.data()!.uid as string,
     account = await db.doc(`accounts/${uid}`).get();
+  if (account.data()?.readOnly === true)
+    throw new BookingError('READ_ONLY', 'Conta de demonstração: somente leitura.', 403);
   if (requireActive && (!account.data()?.publicEnabled || !account.data()?.migrationReady))
     throw new BookingError(
       'LINK_PAUSED',

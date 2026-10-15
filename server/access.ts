@@ -7,12 +7,17 @@ import { BookingError } from '../shared/booking.js';
 export async function requireOwner(req: VercelRequest) {
   const token = req.headers.authorization?.match(/^Bearer (.+)$/)?.[1];
   if (!token) throw new BookingError('UNAUTHENTICATED', 'Entre novamente na sua conta.', 401);
+  let uid: string;
   try {
     const identity = await getAuth(adminApp()).verifyIdToken(token, true);
-    return { uid: identity.uid };
+    uid = identity.uid;
   } catch {
     throw new BookingError('UNAUTHENTICATED', 'Entre novamente na sua conta.', 401);
   }
+  const account = await adminDb().doc(`accounts/${uid}`).get();
+  if (account.data()?.readOnly === true)
+    throw new BookingError('READ_ONLY', 'Conta de demonstração: somente leitura.', 403);
+  return { uid };
 }
 export async function requirePublicProof(req: VercelRequest) {
   const token = req.headers['x-firebase-appcheck'];

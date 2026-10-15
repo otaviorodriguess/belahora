@@ -7,6 +7,7 @@ export type CloudAppointment = {
   origin: 'owner' | 'public' | 'import';
 };
 export type CloudState = {
+  readOnly?: boolean;
   activeBatch?: string | null;
   settings: Settings;
   settingsRevision: number;

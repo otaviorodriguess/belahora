@@ -27,7 +27,8 @@ export default function App() {
       setPage={navigate}
       studio={agenda.settings.studio}
       professional={agenda.settings.professional}
-      onAdd={() => setForm({})}
+      readOnly={agenda.readOnly}
+      onAdd={() => { if (!agenda.readOnly) setForm({}); }}
     >
       <SyncStatus />
       {!agenda.ready && <p role="status">Sua agenda ainda não foi carregada.</p>}
@@ -38,7 +39,8 @@ export default function App() {
           selected={agenda.selected}
           onSelect={agenda.setSelected}
           onOpen={setDetail}
-          onAdd={() => setForm({})}
+          onAdd={() => { if (!agenda.readOnly) setForm({}); }}
+          readOnly={agenda.readOnly}
         />
       )}
       {agenda.ready && page === 'home' && (

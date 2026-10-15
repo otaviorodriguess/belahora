@@ -1,8 +1,9 @@
 import { Smartphone, CircleCheck, LoaderCircle } from 'lucide-react';
 import { useAgenda } from '../hooks/useAgenda';
 export function SyncStatus() {
-  const { online, ready, loading, error, refresh, notice, clearNotice, storageMode, canWrite } =
+  const { online, ready, loading, error, refresh, notice, clearNotice, storageMode, canWrite, readOnly } =
     useAgenda();
+  if (readOnly) return <div className="status-banner" role="status">Demonstração · Somente leitura · Todos os dados são fictícios.</div>;
   return (
     <>
       {(!ready || loading || !online || (storageMode === 'cloud' && !canWrite)) && (

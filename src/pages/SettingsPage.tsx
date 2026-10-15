@@ -12,7 +12,7 @@ import { MigrationPanel } from '../components/MigrationPanel';
 import { AccountPanel } from '../components/AccountPanel';
 const weekdays = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
 export function SettingsPage({ installation }: { installation: ReturnType<typeof useInstall> }) {
-  const { settings, saveSettings, loading, storageMode, canWrite, cloudState } = useAgenda();
+  const { settings, saveSettings, loading, storageMode, canWrite, cloudState, readOnly } = useAgenda();
   const [draft, setDraft] = useState(settings);
   const [baseRevision, setBaseRevision] = useState(cloudState?.settingsRevision);
   const [saved, setSaved] = useState(false);
@@ -49,9 +49,10 @@ export function SettingsPage({ installation }: { installation: ReturnType<typeof
           <p>Uma agenda que acompanha a sua rotina.</p>
         </div>
       </div>
-      {storageMode === 'cloud' && <><MigrationPanel /><BookingLinkPanel /></>}
+      {storageMode === 'cloud' && !readOnly && <><MigrationPanel /><BookingLinkPanel /></>}
       <div className="settings-columns">
         <form onSubmit={(event) => void submit(event)} className="settings-form">
+          <fieldset disabled={readOnly} style={{ display: 'contents' }}>
           <ServicesEditor
             saving={loading}
             services={draft.services ?? defaultServices}
@@ -174,6 +175,7 @@ export function SettingsPage({ installation }: { installation: ReturnType<typeof
               Tudo pronto. Sua rotina foi atualizada.
             </p>
           )}
+          </fieldset>
         </form>
         <div>
           <AccountPanel
@@ -182,12 +184,12 @@ export function SettingsPage({ installation }: { installation: ReturnType<typeof
               setSaved(false);
             }}
           />
-          <BackupPanel
+          {!readOnly && <BackupPanel
             onRestored={(restored) => {
               setDraft(restored);
               setSaved(false);
             }}
-          />
+          />}
           <section className="panel settings-panel install-panel">
             <Smartphone size={28} />
             <h2>Sua agenda sempre por perto</h2>

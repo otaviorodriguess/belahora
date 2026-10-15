@@ -13,6 +13,7 @@ export function AgendaPage({
   onSelect,
   onOpen,
   onAdd,
+  readOnly = false,
 }: {
   appointments: Appointment[];
   busy: BusyEvent[];
@@ -20,6 +21,7 @@ export function AgendaPage({
   onSelect: (d: string) => void;
   onOpen: (a: Appointment) => void;
   onAdd: () => void;
+  readOnly?: boolean;
 }) {
   const [view, setView] = useState<CalendarView>('month');
   const daily = appointments
@@ -127,6 +129,7 @@ export function AgendaPage({
             <button
               className="icon-button outlined"
               aria-label="Adicionar atendimento"
+              disabled={readOnly}
               onClick={onAdd}
             >
               <Plus size={19} />
@@ -161,7 +164,7 @@ export function AgendaPage({
               <CalendarDays size={32} />
               <h3>Um espaço na sua agenda</h3>
               <p>Nenhum atendimento para este dia.</p>
-              <button className="button secondary" onClick={onAdd}>
+              <button className="button secondary" disabled={readOnly} onClick={onAdd}>
                 Agendar atendimento <ArrowUpRight size={16} />
               </button>
             </div>

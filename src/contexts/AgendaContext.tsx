@@ -10,6 +10,7 @@ import type {
   Settings,
 } from '../types';
 export interface AgendaState extends ScheduleSnapshot {
+  readOnly?: boolean;
   storageMode?: 'cloud';
   canWrite?: boolean;
   cloudState?: CloudState | null;

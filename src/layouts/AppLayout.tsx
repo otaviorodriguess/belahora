@@ -8,6 +8,7 @@ export function AppLayout({
   onAdd,
   studio,
   professional,
+  readOnly = false,
 }: {
   page: Page;
   setPage: (p: Page) => void;
@@ -15,6 +16,7 @@ export function AppLayout({
   onAdd: () => void;
   studio: string;
   professional: string;
+  readOnly?: boolean;
 }) {
   const items = [
     { id: 'home' as const, label: 'Início', icon: House },
@@ -75,7 +77,7 @@ export function AppLayout({
         </div>
         {children}
       </main>
-      <button className="fab" aria-label="Novo agendamento" onClick={onAdd}>
+      <button className="fab" aria-label="Novo agendamento" disabled={readOnly} onClick={onAdd}>
         <Plus size={25} />
         <span>Novo agendamento</span>
       </button>

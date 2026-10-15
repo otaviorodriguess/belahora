@@ -8,7 +8,7 @@ import { Modal } from './Modal';
 import type { Settings } from '../types';
 export function AccountPanel({ onMigrated }: { onMigrated: (settings: Settings) => void }) {
   const { state } = useAuth();
-  const { loading, refresh, appointments, storageMode } = useAgenda();
+  const { loading, refresh, appointments, storageMode, readOnly } = useAgenda();
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState('');
   const [available, setAvailable] = useState(false);
@@ -16,8 +16,8 @@ export function AccountPanel({ onMigrated }: { onMigrated: (settings: Settings) 
   const uid = state.status === 'signed-in' ? state.identity.uid : '';
   const projectId = state.status === 'signed-in' ? state.identity.projectId : '';
   const repository = useMemo(
-    () => (uid ? createAgendaRepository({ kind: 'account', uid, projectId }) : null),
-    [uid, projectId],
+    () => (uid && !readOnly ? createAgendaRepository({ kind: 'account', uid, projectId }) : null),
+    [uid, projectId, readOnly],
   );
   useEffect(() => {
     let active = true;

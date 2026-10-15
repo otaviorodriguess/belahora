@@ -72,6 +72,20 @@ export function CloudAgendaProvider({
 
         if (active && cache) setState(cache);
 
+        // Resolve demo access before opening or claiming any local legacy agenda.
+        if (!navigator.onLine && cache?.readOnly) return;
+        const initialRemote = navigator.onLine ? await loadCloud(identity) : null;
+        if (!active) return;
+        if (initialRemote?.readOnly) {
+          accept(initialRemote);
+          const first = initialRemote.appointments.find((a) => a.status === 'confirmed');
+          if (first) setSelected(first.value.data);
+          unsubscribe = subscribeCloud(identity, accept, (e) => {
+            if (active) setError(e.message);
+          });
+          return;
+        }
+
         const repository = createAgendaRepository({
           kind: 'account',
 
@@ -104,7 +118,7 @@ export function CloudAgendaProvider({
           return;
         }
 
-        let remote = await loadCloud(identity);
+        let remote = initialRemote;
 
         if (!active) return;
 
@@ -175,9 +189,10 @@ export function CloudAgendaProvider({
       }
     : local || { appointments: [], settings: defaults, updatedAt: '' };
 
-  const canWrite = online && confirmed && state?.migrationReady === true;
+  const canWrite = !state?.readOnly && online && confirmed && state?.migrationReady === true;
 
   async function run(operation: () => Promise<unknown>, importing = false) {
+    if (state?.readOnly) throw new Error('Conta de demonstração: somente leitura.');
     if (!(importing ? online && confirmed && !!state : canWrite))
       throw new Error('Conecte à internet e conclua a migração nas configurações.');
 
@@ -302,6 +317,8 @@ export function CloudAgendaProvider({
         storageMode: 'cloud',
 
         canWrite,
+
+        readOnly: state?.readOnly === true,
 
         cloudState: state,
 

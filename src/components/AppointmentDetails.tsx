@@ -14,7 +14,7 @@ export function AppointmentDetails({
   onClose: () => void;
   onEdit: (reschedule: boolean) => void;
 }) {
-  const { remove, ready, canWrite } = useAgenda();
+  const { remove, ready, canWrite, readOnly } = useAgenda();
   const [confirm, setConfirm] = useState(false);
   const [working, setWorking] = useState(false);
   const [error, setError] = useState('');
@@ -98,7 +98,7 @@ export function AppointmentDetails({
               <dd>{a.observacoes || 'Nenhuma observação.'}</dd>
             </div>
           </dl>
-          {phone && (
+          {phone && !readOnly && (
             <a
               className="button whatsapp"
               href={whatsapp}
@@ -123,7 +123,7 @@ export function AppointmentDetails({
               Cancelar
             </button>
           </div>
-          {blocked && <p className="helper">Aguarde o carregamento e verifique a conexão antes de alterar.</p>}
+          {blocked && <p className="helper">{readOnly ? 'Na demonstração, os atendimentos podem ser consultados, mas não alterados.' : 'Aguarde o carregamento e verifique a conexão antes de alterar.'}</p>}
         </>
       )}
       {error && (

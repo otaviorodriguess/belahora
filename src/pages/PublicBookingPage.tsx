@@ -3,6 +3,7 @@ import { Check, ArrowLeft, CalendarDays, Clock3 } from 'lucide-react';
 import type { Catalog, Receipt, PublicBookingInput } from '../../shared/booking';
 import { publicCatalog, publicSlots, publicConfirm } from '../services/publicBooking';
 import { todayKey, money, displayDate } from '../utils/dates';
+import { BookingIdentity } from '../components/BookingIdentity';
 export function PublicBookingPage({ code }: { code: string }) {
   const [catalog, setCatalog] = useState<Catalog | null>(null),
     [serviceId, setServiceId] = useState(''),
@@ -90,17 +91,18 @@ export function PublicBookingPage({ code }: { code: string }) {
   return (
     <main className="public-booking">
       <header className="booking-brand">
-        <span className="eyebrow">BELA HORA · AGENDAMENTO</span>
-        <p>Um tempo para cuidar de você.</p>
+        <img src="/favicon.svg" alt="" />
+        <span>Bela Hora <span>· Agendamento online</span></span>
       </header>
       <section className="panel booking-card">
+        {catalog && <BookingIdentity settings={catalog} />}
         {receipt ? (
           <div className="booking-success">
             <span className="booking-check">
               <Check size={32} />
             </span>
             <span className="eyebrow">ESTÁ COMBINADO</span>
-            <h1>Seu horário está reservado.</h1>
+            <h2>Seu horário está reservado.</h2>
             <p>{catalog?.studio}</p>
             <div className="booking-summary">
               <strong>{receipt.serviceName}</strong>
@@ -121,9 +123,13 @@ export function PublicBookingPage({ code }: { code: string }) {
           </div>
         ) : (
           <>
-            <span className="eyebrow">{catalog?.professional || 'BEM-VINDA'}</span>
-            <h1>{catalog?.studio || 'Agende seu cuidado'}</h1>
-            <p className="muted">Escolha o serviço e o melhor horário para você.</p>
+            {!catalog && <h1>Agende seu cuidado</h1>}
+            {catalog && <ol className="booking-progress" aria-label="Etapas do agendamento">
+              {['Seu cuidado', 'Dia e horário', 'Confirmação'].map((label, index) => {
+                const step = review ? 2 : service ? 1 : 0;
+                return <li key={label} aria-current={step === index ? 'step' : undefined} className={index < step ? 'complete' : ''}><span>{index < step ? <Check size={14} /> : index + 1}</span>{label}</li>;
+              })}
+            </ol>}
             {error && (
               <p role="alert" className="error-message">
                 {error}
@@ -143,7 +149,8 @@ export function PublicBookingPage({ code }: { code: string }) {
                 {!review ? (
                   <>
                     <fieldset disabled={busy}>
-                      <legend>1. Seu cuidado</legend>
+                      <legend>Escolha seu cuidado</legend>
+                      <p className="booking-section-copy">Encontre o serviço que combina com seu momento.</p>
                       <div className="booking-services">
                         {catalog.services.map((s) => (
                           <button
@@ -153,10 +160,9 @@ export function PublicBookingPage({ code }: { code: string }) {
                             key={s.id}
                             onClick={() => setServiceId(s.id)}
                           >
-                            <strong>{s.nome}</strong>
-                            <span>
-                              {s.duracao} min · {money(s.preco)}
-                            </span>
+                            <span className="booking-service-choice" aria-hidden="true">{serviceId === s.id && <Check size={15} />}</span>
+                            <span className="booking-service-copy"><strong>{s.nome}</strong><span><Clock3 size={14} aria-hidden="true" /> {s.duracao} min</span></span>
+                            <strong className="booking-service-price">{money(s.preco)}</strong>
                           </button>
                         ))}
                       </div>
@@ -165,7 +171,7 @@ export function PublicBookingPage({ code }: { code: string }) {
                     {service && (
                       <>
                         <fieldset>
-                          <legend>2. Dia e horário</legend>
+                          <legend>Seu melhor horário</legend>
                           <label className="field">
                             Dia
                             <input
@@ -201,7 +207,7 @@ export function PublicBookingPage({ code }: { code: string }) {
                           )}
                         </fieldset>
                         <fieldset>
-                          <legend>3. Seus dados</legend>
+                          <legend>Para receber você</legend>
                           <label className="field">
                             Seu nome
                             <input

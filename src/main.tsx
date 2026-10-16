@@ -6,6 +6,7 @@ import { AuthProvider } from './contexts/AuthProvider';
 import { AuthGate } from './components/AuthGate';
 import './styles.css';
 import './experience.css';
+import './booking.css';
 class ErrorBoundary extends Component<{ children: ReactNode }, { failed: boolean }> {
   state = { failed: false };
   static getDerivedStateFromError() {

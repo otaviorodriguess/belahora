@@ -10,6 +10,7 @@ import { services as defaultServices } from '../data/services';
 import { BookingLinkPanel } from '../components/BookingLinkPanel';
 import { MigrationPanel } from '../components/MigrationPanel';
 import { AccountPanel } from '../components/AccountPanel';
+import { BookingAppearance } from '../components/BookingAppearance';
 const weekdays = ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'];
 export function SettingsPage({ installation }: { installation: ReturnType<typeof useInstall> }) {
   const { settings, saveSettings, loading, storageMode, canWrite, cloudState, readOnly } = useAgenda();
@@ -18,13 +19,15 @@ export function SettingsPage({ installation }: { installation: ReturnType<typeof
   const [saved, setSaved] = useState(false);
   const [formError, setFormError] = useState('');
   const [installHelp, setInstallHelp] = useState(false);
+  const [imageBusy, setImageBusy] = useState(false);
   const { install, canInstall, installed } = installation;
   const change = <K extends keyof typeof draft>(key: K, value: (typeof draft)[K]) => {
-    setDraft({ ...draft, [key]: value });
+    setDraft(current => ({ ...current, [key]: value }));
     setSaved(false);
   };
   async function submit(e: FormEvent) {
     e.preventDefault();
+    if (imageBusy) return;
     setFormError('');
     if (draft.hours.some((d) => d.start >= d.end)) {
       setFormError('O horário final deve ser posterior ao inicial em todos os dias.');
@@ -54,7 +57,7 @@ export function SettingsPage({ installation }: { installation: ReturnType<typeof
         <form onSubmit={(event) => void submit(event)} className="settings-form">
           <fieldset disabled={readOnly} style={{ display: 'contents' }}>
           <ServicesEditor
-            saving={loading}
+            saving={loading || imageBusy}
             services={draft.services ?? defaultServices}
             onChange={(services) => change('services', services)}
           />
@@ -82,6 +85,7 @@ export function SettingsPage({ installation }: { installation: ReturnType<typeof
               </label>
             </div>
           </section>
+          <BookingAppearance settings={draft} disabled={loading || readOnly === true || canWrite === false} onChange={change} onBusy={setImageBusy} />
           <section className="panel settings-panel">
             <h2>
               <Clock3 size={21} />
@@ -166,7 +170,7 @@ export function SettingsPage({ installation }: { installation: ReturnType<typeof
               {formError}
             </p>
           )}
-          <button className="button" type="submit" disabled={loading || canWrite === false}>
+          <button className="button" type="submit" disabled={loading || imageBusy || canWrite === false}>
             <Check size={18} />
             {saved ? 'Configurações salvas' : 'Salvar configurações'}
           </button>

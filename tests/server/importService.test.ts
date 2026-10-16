@@ -12,6 +12,31 @@ import { adminDb } from '../../server/firebaseAdmin';
 import { hash } from '../../server/agendaService';
 
 import { defaults } from '../../src/data/defaults';
+import { getPublicCatalog } from '../../server/publicBooking';
+
+it('reativa um link que estava ativo após concluir a restauração, sem ativar um link já pausado', async () => {
+  for (const wasEnabled of [true, false]) {
+    const uid = `resume-${crypto.randomUUID()}`;
+    const code = `link-${crypto.randomUUID()}`;
+    const batchId = crypto.randomUUID();
+    const account = adminDb().doc(`accounts/${uid}`);
+    await account.set({
+      settings: defaults,
+      settingsRevision: 2,
+      migrationReady: true,
+      publicEnabled: wasEnabled,
+      linkCode: code,
+      activeBatch: null,
+    });
+    await adminDb().doc(`bookingLinks/${code}`).set({ uid });
+    await startImport(uid, { batchId, count: 0, root: hash([]), settings: defaults });
+    expect((await account.get()).data()?.publicEnabled).toBe(false);
+    await completeImport(uid, batchId);
+    expect((await account.get()).data()?.publicEnabled).toBe(wasEnabled);
+    if (wasEnabled) await expect(getPublicCatalog(code)).resolves.toHaveProperty('studio');
+    else await expect(getPublicCatalog(code)).rejects.toThrow('não está recebendo novas reservas');
+  }
+});
 
 it('recupera catálogo antigo quando outro aparelho iniciou a nuvem vazia, sem sobrescrever edições', async () => {
   const uid = `catalog-${crypto.randomUUID()}`;

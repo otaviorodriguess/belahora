@@ -59,6 +59,7 @@ export async function startImport(uid: string, m: Manifest) {
       root: m.root,
       count: m.count,
       settings,
+      resumePublicEnabled: acc.data()?.publicEnabled === true,
       complete: false,
       createdAt: new Date().toISOString(),
     });
@@ -157,7 +158,11 @@ export async function completeImport(uid: string, batchId: string) {
         409,
       );
     tx.update(batch, { complete: true });
-    tx.update(a, { migrationReady: true, activeBatch: null });
+    tx.update(a, {
+      migrationReady: true,
+      activeBatch: null,
+      publicEnabled: b.data()!.resumePublicEnabled === true && !!acc.data()?.linkCode,
+    });
   });
 }
 export async function resolveImport(

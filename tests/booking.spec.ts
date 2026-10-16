@@ -282,7 +282,8 @@ test('migra agenda, compartilha link e recebe reserva automática sem login da c
 
   await page.getByRole('button', { name: 'Importar e conferir' }).click();
 
-  await expect.poll(() => chunks).toBe(2);
+  // The first 50-record transaction batch can exceed 5s on the local emulator.
+  await expect.poll(() => chunks, { timeout: 20000 }).toBe(2);
 
   await page.unroute('**/api/agenda');
 

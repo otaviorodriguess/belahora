@@ -28,6 +28,7 @@ Na versão em nuvem, a agenda acompanha a conta. Ao entrar com o mesmo login em 
 | Informações da cliente | Nome, telefone, serviços, valor e observações em cada atendimento |
 | Sincronização por conta | A mesma agenda em diferentes aparelhos |
 | Catálogo personalizado | Cada profissional cadastra seus serviços e preços; novas contas começam sem serviços |
+| Identidade do espaço | Foto da profissional e logo opcionais, com prévia e exibição no link público |
 | Link de agendamento | A cliente escolhe serviço e horário e confirma a reserva pelo link compartilhado |
 | Proteção de horários | Disponibilidade conferida no servidor para evitar reservas simultâneas no mesmo horário |
 | Aplicativo instalável | PWA para abrir pela tela inicial do celular |
@@ -107,6 +108,12 @@ A configuração de exemplo inicia no **modo local**, sem login nem sincronizaç
 | `BOOKING_RATE_SECRET` | Segredo do limitador de requisições, **somente no servidor** |
 
 Nunca coloque credenciais privadas em variáveis `VITE_*`: elas são incorporadas ao frontend. Arquivos `.env`, credenciais, backups, dados de clientes e resultados locais de testes não pertencem ao repositório.
+
+## Personalizar o link de agendamento
+
+Em **Configurações → Aparência do agendamento**, escolha a foto da profissional e/ou a logo do espaço. Os dois campos são opcionais. Confira a prévia e clique em **Salvar aparência**. A apresentação aparece no link público da própria conta; é possível trocar ou remover as imagens a qualquer momento.
+
+São aceitas imagens JPG, PNG e WebP de até 8 MB. O aplicativo reduz as imagens antes de salvar: a foto recebe um recorte central e a logo mantém a proporção. Elas ficam públicas para quem acessar o link de agendamento. As imagens também são preservadas no backup.
 
 ## Instalar no celular
 

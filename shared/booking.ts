@@ -33,7 +33,7 @@ export type Receipt = {
   end: string;
   price: number;
 };
-export type Catalog = { studio: string; professional: string; services: Service[] };
+export type Catalog = { studio: string; professional: string; professionalPhoto?: string; studioLogo?: string; services: Service[] };
 export type Command =
   | { kind: 'create'; input: AppointmentInput; operationId: string }
   | {

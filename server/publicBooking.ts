@@ -31,6 +31,8 @@ export async function getPublicCatalog(code: string): Promise<Catalog> {
   return {
     studio: settings.studio,
     professional: settings.professional,
+    professionalPhoto: settings.professionalPhoto,
+    studioLogo: settings.studioLogo,
     services: (settings.services || [])
       .filter((s) => s.active !== false)
       .map(({ id, nome, preco, duracao }) => ({ id, nome, preco, duracao })),

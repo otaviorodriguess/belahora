@@ -40,6 +40,8 @@ export interface WorkingDay {
   end: string;
 }
 export interface Settings {
+  professionalPhoto?: string;
+  studioLogo?: string;
   services?: Service[];
   professional: string;
   studio: string;

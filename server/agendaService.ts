@@ -1,4 +1,5 @@
 import { createHash, randomUUID, randomBytes } from 'node:crypto';
+import { validateBrandImage } from '../shared/branding.js';
 import type { AppointmentInput, Settings } from '../src/types/index.js';
 import {
   canonical,
@@ -63,6 +64,13 @@ export function cleanInput(input: AppointmentInput): AppointmentInput {
   );
 }
 export function validateSettings(s: Settings) {
+  let professionalPhoto: string | undefined, studioLogo: string | undefined;
+  try {
+    professionalPhoto = validateBrandImage(s?.professionalPhoto);
+    studioLogo = validateBrandImage(s?.studioLogo);
+  } catch (error) {
+    throw new BookingError('INVALID_INPUT', error instanceof Error ? error.message : 'Imagem inválida.');
+  }
   if (
     !s ||
     typeof s.studio !== 'string' ||
@@ -104,7 +112,7 @@ export function validateSettings(s: Settings) {
   )
     throw new BookingError('INVALID_INPUT', 'Confira os serviços.');
   return JSON.parse(
-    JSON.stringify({ ...s, mode: 'local', cachedCalendarId: undefined }),
+    JSON.stringify({ ...s, professionalPhoto, studioLogo, mode: 'local', cachedCalendarId: undefined }),
   ) as Settings;
 }
 export async function mutateAppointment(

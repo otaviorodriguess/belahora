@@ -1,4 +1,5 @@
 import { isValid, parseISO } from 'date-fns';
+import { validateBrandImage } from '../../shared/branding';
 import type { AgendaBackup, Appointment, LocalAgenda, Settings } from '../types';
 import { endTime, minutes } from '../utils/dates';
 export const MAX_BACKUP_BYTES = 10 * 1024 * 1024;
@@ -69,6 +70,8 @@ export function validateBackupSettings(value: unknown): Settings {
   }
   return {
     professional: value.professional,
+    ...(validateBrandImage(value.professionalPhoto) ? { professionalPhoto: validateBrandImage(value.professionalPhoto) } : {}),
+    ...(validateBrandImage(value.studioLogo) ? { studioLogo: validateBrandImage(value.studioLogo) } : {}),
     studio: value.studio,
     gap: Number(value.gap),
     hours,

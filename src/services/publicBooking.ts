@@ -4,15 +4,15 @@ import {
   getToken,
   type AppCheck,
 } from 'firebase/app-check';
-import { getFirebaseAuth } from './firebaseClient';
+import { getFirebaseApp } from './firebaseApp';
 import type { Catalog, PublicBookingInput, Receipt } from '../../shared/booking';
 let check: AppCheck | undefined;
 async function headers() {
-  const auth = getFirebaseAuth(),
+  const app = getFirebaseApp(),
     siteKey = import.meta.env.VITE_APPCHECK_SITE_KEY;
-  if (!auth || !siteKey)
+  if (!app || !siteKey)
     throw new Error('O agendamento online ainda não foi ativado. Fale com a profissional.');
-  check ??= initializeAppCheck(auth.app, {
+  check ??= initializeAppCheck(app, {
     provider: new ReCaptchaV3Provider(siteKey),
     isTokenAutoRefreshEnabled: true,
   });

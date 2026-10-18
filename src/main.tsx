@@ -1,12 +1,10 @@
-import { StrictMode, Component, type ReactNode } from 'react';
+import { StrictMode, Component, Suspense, lazy, type ReactNode } from 'react';
 import { createRoot } from 'react-dom/client';
-import App from './App';
 import { PublicBookingPage } from './pages/PublicBookingPage';
-import { AuthProvider } from './contexts/AuthProvider';
-import { AuthGate } from './components/AuthGate';
 import './styles.css';
 import './experience.css';
 import './booking.css';
+const OwnerApp = lazy(() => import('./OwnerApp'));
 class ErrorBoundary extends Component<{ children: ReactNode }, { failed: boolean }> {
   state = { failed: false };
   static getDerivedStateFromError() {
@@ -29,11 +27,13 @@ class ErrorBoundary extends Component<{ children: ReactNode }, { failed: boolean
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ErrorBoundary>
-      {location.pathname.startsWith('/agendar/') ? <PublicBookingPage code={location.pathname.split('/')[2] || ''} /> : <AuthProvider>
-        <AuthGate>
-          <App />
-        </AuthGate>
-      </AuthProvider>}
+      {location.pathname.startsWith('/agendar/') ? (
+        <PublicBookingPage code={location.pathname.split('/')[2] || ''} />
+      ) : (
+        <Suspense fallback={<main className="empty-state">Abrindo sua agenda…</main>}>
+          <OwnerApp />
+        </Suspense>
+      )}
     </ErrorBoundary>
   </StrictMode>,
 );

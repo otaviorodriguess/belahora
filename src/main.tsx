@@ -4,6 +4,7 @@ import { PublicBookingPage } from './pages/PublicBookingPage';
 import './styles.css';
 import './experience.css';
 import './booking.css';
+import './public-booking.css';
 const OwnerApp = lazy(() => import('./OwnerApp'));
 class ErrorBoundary extends Component<{ children: ReactNode }, { failed: boolean }> {
   state = { failed: false };

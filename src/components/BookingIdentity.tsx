@@ -1,4 +1,4 @@
-import { Sparkles, UserRound } from 'lucide-react';
+import { UserRound } from 'lucide-react';
 import type { Settings } from '../types';
 
 export function BookingIdentity({
@@ -12,12 +12,12 @@ export function BookingIdentity({
         {settings.studioLogo ? (
           <img src={settings.studioLogo} alt={`Logo de ${settings.studio || 'seu espaço'}`} />
         ) : (
-          <Sparkles size={28} strokeWidth={1.4} aria-hidden="true" />
+          <span className="booking-monogram" aria-hidden="true">{(settings.studio || 'Bela Hora').trim().split(/\s+/).slice(0, 2).map((word) => word[0]).join('')}</span>
         )}
       </div>
-      <span className="eyebrow">UM MOMENTO PARA VOCÊ</span>
+      <span className="eyebrow">BELEZA NO SEU TEMPO</span>
       <h1>{settings.studio || 'Seu espaço de beleza'}</h1>
-      <p className="booking-welcome">Escolha seu cuidado. Encontre seu melhor horário.</p>
+      <p className="booking-welcome">Seu próximo momento de cuidado começa aqui.</p>
       {(settings.professional || settings.professionalPhoto) && (
         <div className="booking-professional">
           {settings.professionalPhoto ? (

@@ -123,7 +123,7 @@ export function PublicBookingPage({ code }: { code: string }) {
           </div>
         ) : (
           <>
-            {!catalog && <h1>Agende seu cuidado</h1>}
+            {!catalog && <div className="booking-loading-heading"><span className="eyebrow">AGENDAMENTO ONLINE</span><h1>Um tempo para você.</h1></div>}
             {catalog && <ol className="booking-progress" aria-label="Etapas do agendamento">
               {['Seu cuidado', 'Dia e horário', 'Confirmação'].map((label, index) => {
                 const step = review ? 2 : service ? 1 : 0;
@@ -137,7 +137,8 @@ export function PublicBookingPage({ code }: { code: string }) {
             )}
             {!catalog ? (
               <>
-                <p role="status">{error ? 'A agenda não pôde ser aberta.' : 'Abrindo agenda…'}</p>
+                <p role="status">{error ? 'A agenda não pôde ser aberta.' : 'Preparando os serviços e horários para você…'}</p>
+                {!error && <div className="booking-skeleton" aria-hidden="true"><span /><span /><span /></div>}
                 {error && (
                   <button className="button secondary" onClick={() => setRetry((n) => n + 1)}>
                     Tentar novamente
@@ -150,7 +151,7 @@ export function PublicBookingPage({ code }: { code: string }) {
                   <>
                     <fieldset disabled={busy}>
                       <legend>Escolha seu cuidado</legend>
-                      <p className="booking-section-copy">Encontre o serviço que combina com seu momento.</p>
+                      <p className="booking-section-copy">Selecione um serviço para ver os horários disponíveis.</p>
                       <div className="booking-services">
                         {catalog.services.map((s) => (
                           <button
@@ -172,6 +173,7 @@ export function PublicBookingPage({ code }: { code: string }) {
                       <>
                         <fieldset>
                           <legend>Seu melhor horário</legend>
+                          <div className="booking-selection-note"><Check size={16} aria-hidden="true" /><span>{service.nome}</span><strong>{money(service.preco)}</strong></div>
                           <label className="field">
                             Dia
                             <input
@@ -214,6 +216,7 @@ export function PublicBookingPage({ code }: { code: string }) {
                               required
                               maxLength={100}
                               autoComplete="name"
+                              placeholder="Como podemos chamar você?"
                               value={name}
                               onChange={(e) => setName(e.target.value)}
                             />
@@ -224,6 +227,7 @@ export function PublicBookingPage({ code }: { code: string }) {
                               required
                               type="tel"
                               autoComplete="tel"
+                              placeholder="(00) 00000-0000"
                               maxLength={20}
                               value={phone}
                               onChange={(e) => setPhone(e.target.value)}
